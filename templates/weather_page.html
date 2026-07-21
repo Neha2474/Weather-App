@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Application</title>
+    <link rel="stylesheet" href="{% static 'weather.css' %}">
+</head>
+<body>
+    <h1>Weather App</h1>
+    <form method="POST">
+     {% csrf_token %}
+        <input type="text" name="city" placeholder="Enter city name" required />
+        <button type="submit">Check</button>
+    </form>
+
+    {% if error %}
+    <div>
+        {{ error }}
+    </div>
+    {% endif %}
+
+    {% if weather %}
+        <div>
+            <h2>{{ weather.city }}</h2>
+            <p>Temperature : {{ weather.temperature }}°C</p>
+            <p>Humidity : {{ weather.humidity }}%</p>
+            <p>Pressure : {{ weather.pressure }}</p>
+            <p>Condition : {{ weather.description }}</p>
+        </div>
+    {% endif %}
+
+    {% if searches %}
+        <div id="clear">
+            <h3>Recent Searches</h3>
+            <ul>
+                {% for search in searches %}
+                    <li>
+                        {{ search.city }} - {{ search.temperature }}°C - {{ search.description }}
+                    </li>
+                {% endfor %}
+            </ul>
+            <form method="POST">
+            {% csrf_token %}
+                <button type="submit" name="clearAll" >Clear</button>
+            </form>
+        </div>
+    {% endif %}
+</body>
+</html>
